@@ -1,13 +1,14 @@
 import torchvision.models as models
 
-from torch.nn import Module, Linear, Sequential, ReLU
+from torch.nn import Module, Linear, Sequential, ReLU, Dropout
 
-class Densenet(Module):
+class Efficientnet(Module):
     def __init__(self, pretrained=False):
-        super(Densenet, self).__init__()
-        self.model = models.densenet161(pretrained=pretrained)
+        super(Efficientnet, self).__init__()
+        self.model = models.efficientnet_b4(pretrained=pretrained)
         self.model.classifier = Sequential(
-            Linear(2208,500),
+            Dropout(p=0.4, inplace=True),
+            Linear(1792,500),
             ReLU(),
             Linear(500,250),
             Linear(250,1)

@@ -2,12 +2,12 @@ import torchvision.models as models
 
 from torch.nn import Module, Linear, Sequential, ReLU
 
-class Densenet(Module):
+class Resnext(Module):
     def __init__(self, pretrained=False):
-        super(Densenet, self).__init__()
-        self.model = models.densenet161(pretrained=pretrained)
+        super(Resnext, self).__init__()
+        self.model = models.resnext50_32x4d(pretrained=pretrained)
         self.model.classifier = Sequential(
-            Linear(2208,500),
+            Linear(2048,500),
             ReLU(),
             Linear(500,250),
             Linear(250,1)

@@ -35,6 +35,7 @@ if __name__ == '__main__':
     trainer = Trainer(criterion, optimizer, scheduler, dataloader, root_dir, batch_size)
     model, _, _ = trainer.train_model(name, model, epochs=30)
 
+    model.eval()
     test_dataset = get_dataset(root_dir, phase='Val')
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=0)
     
