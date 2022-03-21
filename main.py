@@ -7,13 +7,13 @@ from torch.nn import SmoothL1Loss
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
-from models import Densenet
+from models.densenet import Densenet
 from dataset import get_dataset
 from train import Trainer
 
 if __name__ == '__main__':
     name = "densenet"
-    root_dir = '/home/sb4539/Covid-19-Competition'
+    root_dir = "/home/sb4539/Covid-19-Competition"
     if not os.path.exists(os.path.join(root_dir, name)):
         os.makedirs(os.path.join(root_dir, name))
 
