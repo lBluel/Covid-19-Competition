@@ -13,11 +13,11 @@ from train import Trainer
 
 if __name__ == '__main__':
     name = "densenet"
-    root_dir = '/home/sb4539/competition'
+    root_dir = '/home/sb4539/Covid-19-Competition'
     if not os.path.exists(os.path.join(root_dir, name)):
         os.makedirs(os.path.join(root_dir, name))
 
-    batch_size = {'train': 32, 'valid': 32}
+    batch_size = {'train': 16, 'valid': 16}
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = Densenet().to(device)

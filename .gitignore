@@ -1,4 +1,6 @@
 .DS_Store
+__pycache__
+models/__pycache__
 Train.zip
 Val.zip
 Train/

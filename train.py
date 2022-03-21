@@ -11,12 +11,24 @@ class Trainer:
         self.root_dir = root_dir
         self.batch_size = batch_size
         self.patience = patience
+    
+    def load_checkpoint(self, name, model):
+        checkpoint = torch.load(os.path.join(self.root_dir, name, "checkpoint.tar"))
+        self.optimizer = checkpoint['optimizer_state_dict']
+        self.scheduler = checkpoint['scheduler_state_dict']
+        model.load_state_dict(checkpoint['model_state_dict'])
+        epoch = checkpoint['epoch']
+        return model, epoch
 
-    def train_model(self, name, model, epochs=30):
+    def train_model(self, name, model, epochs=30, checkpoint_epoch = 0):
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         min_validation_loss, patience = np.inf, 0
         train_loss, val_loss = [], []
-        for epoch in range(epochs):
+        
+        if checkpoint_epoch != 0:
+            print("Continuing training from epoch = {}".format(checkpoint_epoch))
+        
+        for epoch in range(checkpoint_epoch, epochs):
             for phase in ['train', 'valid']:
                 if phase == 'train':
                     model.train()
@@ -61,7 +73,7 @@ class Trainer:
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'scheduler_state_dict': self.scheduler.state_dict(),
                     'loss': val_loss[-1]
-                }, os.path.join(self.root_dir, name, "checkpoint.tar".format(epoch)))
+                }, os.path.join(self.root_dir, name, "checkpoint.tar"))
             else:
                 if patience > self.patience:
                     print("Validation loss hasn't decreased for {} epochs. Early Stopping the training...".format(patience))
