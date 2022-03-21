@@ -6,3 +6,4 @@ Val.zip
 Train/
 Val/
 Train.csv
+*.log
