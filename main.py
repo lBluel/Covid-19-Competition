@@ -7,12 +7,12 @@ from torch.nn import SmoothL1Loss
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
-from models.densenet import Densenet
+from models.ensemble import Ensemble
 from dataset import get_dataset
 from train import Trainer
 
 if __name__ == '__main__':
-    name = "densenet"
+    name = "ensemble"
     root_dir = "/home/sb4539/Covid-19-Competition"
     if not os.path.exists(os.path.join(root_dir, name)):
         os.makedirs(os.path.join(root_dir, name))
@@ -20,7 +20,8 @@ if __name__ == '__main__':
     batch_size = {'train': 16, 'valid': 16}
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = Densenet().to(device)
+    model = Ensemble().to(device)
+    model.load_ensemble_models(root_dir)
     
     train_datset, val_dataset = get_dataset(root_dir, phase='Train', val_split=0.1)
     dataloader = {
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     scheduler = CosineAnnealingLR(optimizer, T_max=len(train_datset) // batch_size['train'])
 
     trainer = Trainer(criterion, optimizer, scheduler, dataloader, root_dir, batch_size)
-    model, _, _ = trainer.train_model(name, model, epochs=30)
+    model, _, _ = trainer.train_model(name, model, epochs=50)
 
     model.eval()
     test_dataset = get_dataset(root_dir, phase='Val')
